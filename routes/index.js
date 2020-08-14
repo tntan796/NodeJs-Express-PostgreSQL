@@ -13,10 +13,7 @@ const client = new Client({
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  client.connect()
-  client.query('SELECT * from contact')
-  .then(result => res.json(result.rows))
-  .catch(error => console.log(error));
+  res.render('index', { title: 'Express' });
 });
 
 router.get('/contacts', function(req, res, next) {
