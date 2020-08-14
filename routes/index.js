@@ -11,9 +11,6 @@ const client = new Client({
     port: 5432,
 });
 
-
-
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
   client.connect()
@@ -21,5 +18,12 @@ router.get('/', function (req, res, next) {
   .then(result => res.json(result.rows))
   .catch(error => console.log(error));
 });
+
+router.get('/contacts', function(req, res, next) {
+  client.connect()
+  client.query('SELECT * from getcontact()')
+  .then(result => res.json(result.rows))
+  .catch(error => console.log(error));
+})
 
 module.exports = router;

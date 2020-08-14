@@ -1,0 +1,10 @@
+1. Hướng dẫn tạo function trả lại một bảng
+
+    CREATE FUNCTION getContact()
+    RETURNS TABLE(id bigint, name text, age bigint) AS
+    $func$
+    SELECT id, name, age
+    FROM   contact
+    $func$ LANGUAGE sql;
+
+2. 
