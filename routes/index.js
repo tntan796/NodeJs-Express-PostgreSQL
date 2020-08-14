@@ -15,6 +15,10 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/test', function (req, res, next) {
+  res.json({name:'tano'});
+});
+
 router.get('/contacts', function(req, res, next) {
   client.connect()
   client.query('SELECT * from getcontact()')
