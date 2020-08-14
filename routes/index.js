@@ -10,14 +10,6 @@ const client = new Client({
     password: 'tano',
     port: 5432,
 });
-
-if(process.env.NODE_ENV === 'production'){
-  const path  =  require('path');
-  app.get('/*',(req,res)=>{
-      res.sendfile(path.resolve(__dirname,'client','build','index.html'))
-  })
-}
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
