@@ -17,7 +17,6 @@ const products = [
 
 router.get('/', function (req, res, next) {
     const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
-    console.log('productsLocalStorage:', productsLocalStorage);
     if (productsLocalStorage) {
         res.json(productsLocalStorage);
     } else {
@@ -33,6 +32,34 @@ router.post('/add', function (req, res, next) {
     productsLocalStorage.push(data);
     localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
     res.json(productsLocalStorage);
+});
+
+router.delete('/delete/:id', function (req, res, next) {
+    const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    const id = req.params.id;
+    if (productsLocalStorage && productsLocalStorage.length > 0) {
+        const index = productsLocalStorage.findIndex(product => product.id == id);
+        if (index !== -1) {
+            productsLocalStorage.splice(productsLocalStorage.findIndex, 1);
+            localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
+        }
+    }
+    res.json(productsLocalStorage);
+});
+
+
+router.put('/edit', function (req, res, next) {
+    const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    const productUpdate = req.body;
+    res.json(productUpdate);
+    // if (productsLocalStorage && productsLocalStorage.length > 0) {
+    //     const product = productsLocalStorage.find(product => product.id == productUpdate.id);
+    //     if (index !== -1) {
+    //         product = {...productUpdate};
+    //         localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
+    //     }
+    // }
+    // res.json(productsLocalStorage);
 });
 
 module.exports = router;
