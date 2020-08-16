@@ -47,7 +47,7 @@ router.post('/add', function (req, res, next) {
     data.id = productsLocalStorage.reduce((prev, current) => prev.id > current.id ? prev.id : current.id) + 1;
     productsLocalStorage.push(data);
     localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
-    res.json(productsLocalStorage);
+    res.json(data);
 });
 
 router.delete('/delete/:id', function (req, res, next) {
