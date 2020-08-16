@@ -25,6 +25,22 @@ router.get('/', function (req, res, next) {
     }
 });
 
+router.get('/:id', function (req, res, next) {
+    const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    const id = req.params.id;
+    if (productsLocalStorage) {
+        const productIndex = productsLocalStorage.findIndex(product => product.id == id);
+        if (productIndex !== -1) {
+            res.json(productsLocalStorage[productIndex + 1]);
+        } else {
+            res.json(null);
+        }
+    } else {
+        res.json(null);
+    }
+});
+
+
 router.post('/add', function (req, res, next) {
     const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
     const data = req.body;
@@ -48,18 +64,20 @@ router.delete('/delete/:id', function (req, res, next) {
 });
 
 
-router.put('/edit', function (req, res, next) {
+router.post('/edit', function (req, res, next) {
     const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
     const productUpdate = req.body;
-    res.json(productUpdate);
-    // if (productsLocalStorage && productsLocalStorage.length > 0) {
-    //     const product = productsLocalStorage.find(product => product.id == productUpdate.id);
-    //     if (index !== -1) {
-    //         product = {...productUpdate};
-    //         localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
-    //     }
-    // }
-    // res.json(productsLocalStorage);
+    if (productsLocalStorage && productsLocalStorage.length > 0) {
+        const product = productsLocalStorage.find(product => product.id == productUpdate.id);
+        if (product) {
+            product.name = productUpdate.name;
+            product.description = productUpdate.description;
+            product.url = productUpdate.url;
+            localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
+        }
+    }
+    localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
+    res.json(productsLocalStorage);
 });
 
 module.exports = router;
