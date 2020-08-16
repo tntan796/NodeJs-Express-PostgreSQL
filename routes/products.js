@@ -31,7 +31,7 @@ router.get('/:id', function (req, res, next) {
     if (productsLocalStorage) {
         const productIndex = productsLocalStorage.findIndex(product => product.id == id);
         if (productIndex !== -1) {
-            res.json(productsLocalStorage[productIndex + 1]);
+            res.json(productsLocalStorage[productIndex]);
         } else {
             res.json(null);
         }
@@ -43,13 +43,12 @@ router.get('/:id', function (req, res, next) {
 
 router.post('/add', function (req, res, next) {
     const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
-    console.log('add:',productsLocalStorage);
     const data = req.body;
-    console.log('add:',data);
     if (productsLocalStorage.length == 0) {
         data.id = 1;
     } else {
-        data.id = productsLocalStorage.reduce((prev, current) => prev.id > current.id ? prev.id : current.id) + 1;
+        const id = Math.max(...productsLocalStorage.map(t=> +t.id)) + 1;
+        data.id = id;
     }
     productsLocalStorage.push(data);
     localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
