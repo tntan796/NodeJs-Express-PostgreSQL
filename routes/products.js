@@ -17,12 +17,22 @@ const products = [
 
 router.get('/', function (req, res, next) {
     const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    console.log('productsLocalStorage:', productsLocalStorage);
     if (productsLocalStorage) {
         res.json(productsLocalStorage);
     } else {
         localStorage.setItem('node-products', JSON.stringify(products));
         res.json(products);
     }
+});
+
+router.post('/add', function (req, res, next) {
+    const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    const data = req.body;
+    data.id = productsLocalStorage.reduce((prev, current) => prev.id > current.id ? prev.id : current.id) + 1;
+    productsLocalStorage.push(data);
+    localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
+    res.json(productsLocalStorage);
 });
 
 module.exports = router;
