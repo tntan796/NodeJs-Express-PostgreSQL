@@ -43,8 +43,14 @@ router.get('/:id', function (req, res, next) {
 
 router.post('/add', function (req, res, next) {
     const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    console.log('add:',productsLocalStorage);
     const data = req.body;
-    data.id = productsLocalStorage.reduce((prev, current) => prev.id > current.id ? prev.id : current.id) + 1;
+    console.log('add:',data);
+    if (productsLocalStorage.length == 0) {
+        data.id = 1;
+    } else {
+        data.id = productsLocalStorage.reduce((prev, current) => prev.id > current.id ? prev.id : current.id) + 1;
+    }
     productsLocalStorage.push(data);
     localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
     res.json(data);
@@ -56,7 +62,7 @@ router.delete('/delete/:id', function (req, res, next) {
     if (productsLocalStorage && productsLocalStorage.length > 0) {
         const index = productsLocalStorage.findIndex(product => product.id == id);
         if (index !== -1) {
-            productsLocalStorage.splice(productsLocalStorage.findIndex, 1);
+            productsLocalStorage.splice(index, 1);
             localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
         }
     }
