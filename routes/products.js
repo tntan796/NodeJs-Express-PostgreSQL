@@ -25,4 +25,64 @@ router.get('/', function (req, res, next) {
     }
 });
 
+router.get('/:id', function (req, res, next) {
+    const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    const id = req.params.id;
+    if (productsLocalStorage) {
+        const productIndex = productsLocalStorage.findIndex(product => product.id == id);
+        if (productIndex !== -1) {
+            res.json(productsLocalStorage[productIndex]);
+        } else {
+            res.json(null);
+        }
+    } else {
+        res.json(null);
+    }
+});
+
+
+router.post('/add', function (req, res, next) {
+    const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    const data = req.body;
+    if (productsLocalStorage.length == 0) {
+        data.id = 1;
+    } else {
+        const id = Math.max(...productsLocalStorage.map(t=> +t.id)) + 1;
+        data.id = id;
+    }
+    productsLocalStorage.push(data);
+    localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
+    res.json(data);
+});
+
+router.delete('/delete/:id', function (req, res, next) {
+    const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    const id = req.params.id;
+    if (productsLocalStorage && productsLocalStorage.length > 0) {
+        const index = productsLocalStorage.findIndex(product => product.id == id);
+        if (index !== -1) {
+            productsLocalStorage.splice(index, 1);
+            localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
+        }
+    }
+    res.json(productsLocalStorage);
+});
+
+
+router.post('/edit', function (req, res, next) {
+    const productsLocalStorage = JSON.parse(localStorage.getItem('node-products'));
+    const productUpdate = req.body;
+    if (productsLocalStorage && productsLocalStorage.length > 0) {
+        const product = productsLocalStorage.find(product => product.id == productUpdate.id);
+        if (product) {
+            product.name = productUpdate.name;
+            product.description = productUpdate.description;
+            product.url = productUpdate.url;
+            localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
+        }
+    }
+    localStorage.setItem('node-products', JSON.stringify(productsLocalStorage));
+    res.json(productsLocalStorage);
+});
+
 module.exports = router;
