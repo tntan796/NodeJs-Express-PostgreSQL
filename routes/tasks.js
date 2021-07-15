@@ -73,8 +73,9 @@ router.delete('/delete/:id', function (req, res, next) {
 router.post('/edit', function (req, res, next) {
     const tasksLocalStorage = JSON.parse(localStorage.getItem('node-tasks'));
     const taskUpdate = req.body;
+    let task = null;
     if (tasksLocalStorage && tasksLocalStorage.length > 0) {
-        const task = tasksLocalStorage.find(task => task.id == taskUpdate.id);
+        task = tasksLocalStorage.find(task => task.id == taskUpdate.id);
         if (task) {
             task.title = taskUpdate.title;
             task.description = taskUpdate.description;
@@ -83,7 +84,7 @@ router.post('/edit', function (req, res, next) {
         }
     }
     localStorage.setItem('node-tasks', JSON.stringify(tasksLocalStorage));
-    res.json(tasksLocalStorage);
+    res.json(task);
 });
 
 module.exports = router;
