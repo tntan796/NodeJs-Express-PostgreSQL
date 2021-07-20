@@ -79,7 +79,7 @@ router.post('/edit', function (req, res, next) {
         if (task) {
             task.title = taskUpdate.title;
             task.description = taskUpdate.description;
-            task.status = taskUpdate.url;
+            task.status = +taskUpdate.status;
             localStorage.setItem('node-tasks', JSON.stringify(tasksLocalStorage));
         }
     }
